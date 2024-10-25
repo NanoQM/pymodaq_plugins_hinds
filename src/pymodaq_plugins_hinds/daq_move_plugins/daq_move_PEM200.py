@@ -6,7 +6,6 @@ from pymodaq.utils.daq_utils import ThreadCommand  # object used to send info ba
 from pymodaq.utils.parameter import Parameter
 from pymodaq_plugins_hinds.hardware.pem200 import PEM200Driver
 
-
 # class PythonWrapperOfYourInstrument:
 #     #  TODO Replace this fake class with the import of the real python wrapper of your instrument
 #     pass
@@ -49,8 +48,8 @@ class DAQ_Move_PEM200(DAQ_Move_base):
     data_actuator_type = DataActuatorType.DataActuator  # wether you use the new data style for actuator otherwise set this
     # as  DataActuatorType.float  (or entirely remove the line)
 
-    params = [{'title': 'Resource Name:', 'name': 'resource_name', 'type': 'string',
-               'value': ''
+    params = [
+                 {'title': 'Resource Name:', 'name': 'resource_name', 'type': 'string', 'value': ''}
               ] + comon_parameters_fun(is_multiaxes, axis_names=_axis_names, epsilon=_epsilon)
 
     # _epsilon is the initial default value for the epsilon parameter allowing pymodaq to know if the controller reached
@@ -137,12 +136,13 @@ class DAQ_Move_PEM200(DAQ_Move_base):
         # self.ini_stage_init(slave_controller=controller)  # will be useful when controller is slave
 
         if self.is_master:  # is needed when controller is master
-            self.controller = PEM200Driver(arg1, arg2, ...)  # arguments for instantiation!)
+            self.controller = PEM200Driver()  # arguments for instantiation!)
+            self.controller.connect(self.settings.child('resource_name').value())
             # todo: enter here whatever is needed for your controller initialization and eventual
             #  opening of the communication channel
 
-        info = "Whatever info you want to log"
-        initialized = self.controller.a_method_or_atttribute_to_check_if_init()  # todo
+        info = "Initialized PEM200"
+        initialized = True #self.controller.a_method_or_atttribute_to_check_if_init()  # todo
         return info, initialized
 
     def move_abs(self, value: DataActuator):

@@ -1,13 +1,16 @@
 import pyvisa
 
 class PEM200Driver:
-    def __init__(self):
+    def __init__(self, resource_name):
+        """Initialize the PEM200 driver"""
         self.rm = None
         self.instrument = None
+        self.resource_name = resource_name
 
-    def connect(self, resource_name):
+    def connect(self):
+        """Connect to the PEM200 device"""
         self.rm = pyvisa.ResourceManager()
-        self.instrument = self.rm.open_resource(resource_name)
+        self.instrument = self.rm.open_resource(self.resource_name)
         self.instrument.timeout = 5000  # Set timeout to 5 seconds
         self.instrument.read_termination = '\n'  # Set read termination to newline
 
@@ -60,6 +63,7 @@ class PEM200Driver:
         return float(response.split('](')[1].strip().rstrip(')'))
 
     def set_pem_output(self, state):
+        """Set the state of the PEM output"""
         if state in [0, 1]:
             self.instrument.write(f':SYS:PEMO {state}')
         else:

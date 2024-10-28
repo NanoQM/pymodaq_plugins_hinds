@@ -1,3 +1,4 @@
+from operator import truediv
 from typing import Union, List, Dict
 
 from pymodaq.control_modules.move_utility_classes import DAQ_Move_base, comon_parameters_fun, main, DataActuatorType, \
@@ -53,11 +54,11 @@ class DAQ_Move_PEM200(DAQ_Move_base):
     # DK - add resource_name, wavelength, retardation, frequency, state
     params = [{'title': 'Resource Name:', 'name': 'resource_name', 'type': 'str', 'value': "VISA-RESOURCE-PLACEHOLDER"},
                 # {'title': 'Drive Value:', 'name': 'drive_value', 'type': 'float', 'value': 0}, DK - drive_value is taken from the left panel of GUI
-              {},  # DK - add a parameter here for the wavelength
-                {},  # DK - add a parameter here for the retardation
-                {},  # DK - add a parameter here for the frequency
-                {},  # DK - add a parameter here for the state  w
-                 {'title': 'Resource Name:', 'name': 'resource_name', 'type': 'string', 'value': ''}
+              {'title': 'wavelength used:', 'name': 'wavelength', 'type': 'integer', 'value': 632 }  # DK - add a parameter here for the wavelength
+                {'title': 'retardation:', 'name': 'retardation', 'type': 'float', 'value': },  # DK - add a parameter here for the retardation
+                {'title': 'frequency:', 'name': 'frequency', 'type': 'list', 'value':'', 'readonly': True},  # DK - add a parameter here for the frequency
+                {'title': 'state:', 'name': 'ON/OFF', 'type': 'integer', 'value': 632},  # DK - add a parameter here for the state  w
+                 {'title': 'state:', 'name': 'ON/OFF', 'type': 'led', 'value': '', 'readonly' : True}
               ] + comon_parameters_fun(is_multiaxes, axis_names=_axis_names, epsilon=_epsilon)
 
     # _epsilon is the initial default value for the epsilon parameter allowing pymodaq to know if the controller reached

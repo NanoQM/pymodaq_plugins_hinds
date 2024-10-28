@@ -27,14 +27,18 @@ class PEM200Driver:
         # Extract the float value from the response
         return float(response.split('](')[1].strip().rstrip(')'))
 
-    def set_modulation_amplitude(self, amplitude):
+    # def set_modulation_amplitude(self, amplitude):
+    #     self.instrument.write(f':MOD:AMP {amplitude}')
+
+    def set_modulation_amplitude(self, wavelength, retardation):
+        amplitude =  wavelength * retardation
         self.instrument.write(f':MOD:AMP {amplitude}')
 
-    def get_modulation_amplitude(self):
-        """Get the modulation amplitude for a given wavelength"""
-        response = self.instrument.query(':MOD:AMP?')
-        # Extract the float value from the response
-        return float(response.split('](')[1].strip().rstrip(')'))
+    # def get_modulation_amplitude(self):
+    #     """Get the modulation amplitude for a given wavelength"""
+    #     response = self.instrument.query(':MOD:AMP?')
+    #     # Extract the float value from the response
+    #     return float(response.split('](')[1].strip().rstrip(')'))
 
     def get_modulation_amplitude(self, wavelength):
         """Get the modulation amplitude for a given wavelength

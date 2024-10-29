@@ -57,7 +57,7 @@ class DAQ_Move_PEM200(DAQ_Move_base):
               {'title': 'wavelength used:', 'name': 'wavelength', 'type': 'integer', 'value': 632 }  # DK - add a parameter here for the wavelength
                 {'title': 'retardation:', 'name': 'retardation', 'type': 'float', 'value': },  # DK - add a parameter here for the retardation
                 {'title': 'frequency:', 'name': 'frequency', 'type': 'list', 'value':'', 'readonly': True},  # DK - add a parameter here for the frequency
-                {'title': 'state:', 'name': 'ON/OFF', 'type': 'integer', 'value': 632},  # DK - add a parameter here for the state  w
+              # DK - add a parameter here for the state  w
                  {'title': 'state:', 'name': 'ON/OFF', 'type': 'led', 'value': '', 'readonly' : True}
               ] + comon_parameters_fun(is_multiaxes, axis_names=_axis_names, epsilon=_epsilon)
 

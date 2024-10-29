@@ -1,14 +1,86 @@
 from typing import Union, List, Dict
+import pyvisa
 
 from pymodaq.control_modules.move_utility_classes import DAQ_Move_base, comon_parameters_fun, main, DataActuatorType, \
     DataActuator  # common set of parameters for all actuators
 from pymodaq.utils.daq_utils import ThreadCommand  # object used to send info back to the main thread
 from pymodaq.utils.parameter import Parameter
-from pymodaq_plugins_hinds.hardware.pem200 import PEM200Driver
+# from pymodaq_plugins_hinds.hardware.pem200 import PEM200Driver
 
-# class PythonWrapperOfYourInstrument:
-#     #  TODO Replace this fake class with the import of the real python wrapper of your instrument
-#     pass
+class PEM200Driver:
+    def __init__(self, resource_name):
+        """Initialize the PEM200 driver"""
+        self.rm = None
+        self.instrument = None
+        self.resource_name = resource_name
+
+    def connect(self):
+        """Connect to the PEM200 device"""
+        self.rm = pyvisa.ResourceManager()
+        self.instrument = self.rm.open_resource(self.resource_name)
+        self.instrument.timeout = 5000  # Set timeout to 5 seconds
+        self.instrument.read_termination = '\n'  # Set read termination to newline
+
+    def identify(self):
+        response = self.instrument.query('*IDN?')
+        # Extract the desired part from the response and remove the trailing ')'
+        return response.split('](')[1].strip().rstrip(')')
+
+    def set_modulation_drive(self, drive_value):
+        if 0.0 <= drive_value <= 1.0:
+            self.instrument.write(f':MOD:DRV {drive_value}')
+        else:
+            raise ValueError("Drive value must be between 0.0 and 1.0")
+
+    def get_modulation_drive(self):
+        response = self.instrument.query(':MOD:DRV?')
+        # Extract the float value from the response
+        return float(response.split('](')[1].strip().rstrip(')'))
+
+    # def set_modulation_amplitude(self, amplitude):
+    #     self.instrument.write(f':MOD:AMP {amplitude}')
+
+    def set_modulation_amplitude(self, wavelength, retardation):
+        amplitude =  wavelength * retardation
+        self.instrument.write(f':MOD:AMP {amplitude}')
+
+    # def get_modulation_amplitude(self):
+    #     """Get the modulation amplitude for a given wavelength"""
+    #     response = self.instrument.query(':MOD:AMP?')
+    #     # Extract the float value from the response
+    #     return float(response.split('](')[1].strip().rstrip(')'))
+
+    def get_modulation_amplitude(self):
+        """Get the modulation amplitude for a given wavelength
+        The modulation amplitude is the product of the wavelength and retardation
+
+        """
+        response = self.instrument.query(':MOD:AMP?')
+        amplitude = float(response.split('](')[1].strip().rstrip(')'))
+        # retardation = amplitude / wavelength
+
+        # Extract the float value from the response
+        return amplitude
+
+
+    def get_frequency(self):
+
+        response = self.instrument.query(':MOD:FREQ?')
+        # Extract the float value from the response
+        return float(response.split('](')[1].strip().rstrip(')'))
+
+    def set_pem_output(self, state):
+        """Set the state of the PEM output"""
+        if state in [0, 1]:
+            self.instrument.write(f':SYS:PEMO {state}')
+        else:
+            raise ValueError("State must be 0 (off) or 1 (on)")
+
+    def close(self):
+        if self.instrument:
+            self.instrument.close()
+        if self.rm:
+            self.rm.close()
 
 # TODO:
 # (1) change the name of the following class to DAQ_Move_TheNameOfYourChoice

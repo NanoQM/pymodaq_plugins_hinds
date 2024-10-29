@@ -110,7 +110,7 @@ class DAQ_Move_PEM200(DAQ_Move_base):
     # TODO add your particular attributes here if any
 
     """
-    is_multiaxes = True  # TODO for your plugin set to True if this plugin is controlled for a multiaxis controller
+    is_multiaxes = False  # TODO for your plugin set to True if this plugin is controlled for a multiaxis controller
     _axis_names: Union[List[str], Dict[str, int]] = {'PEM1':1}  # TODO for your plugin: complete the list
     _controller_units: Union[str, List[str]] = 'nm'  # TODO for your plugin: put the correct unit here, it could be
     # TODO  a single str (the same one is applied to all axes) or a list of str (as much as the number of axes)
@@ -125,10 +125,11 @@ class DAQ_Move_PEM200(DAQ_Move_base):
     # DK - add resource_name, wavelength, retardation, frequency, state
     params = [{'title': 'Resource Name:', 'name': 'resource_name', 'type': 'str', 'value': "VISA-RESOURCE-PLACEHOLDER"},
                 # {'title': 'Drive Value:', 'name': 'drive_value', 'type': 'float', 'value': 0}, DK - drive_value is taken from the left panel of GUI
-              # {},  # DK - add a parameter here for the wavelength
-              #   {},  # DK - add a parameter here for the retardation
-              #   {},  # DK - add a parameter here for the frequency
-              #   {},  # DK - add a parameter here for the state  w
+              {'title': 'wavelength used:', 'name': 'wavelength', 'type': 'integer', 'value': 632 }  # DK - add a parameter here for the wavelength
+                {'title': 'retardation:', 'name': 'retardation', 'type': 'float', 'value': },  # DK - add a parameter here for the retardation
+                {'title': 'frequency:', 'name': 'frequency', 'type': 'list', 'value':'', 'readonly': True},  # DK - add a parameter here for the frequency
+              # DK - add a parameter here for the state  w
+                 {'title': 'state:', 'name': 'ON/OFF', 'type': 'led', 'value': '', 'readonly' : True}
               ] + comon_parameters_fun(is_multiaxes, axis_names=_axis_names, epsilon=_epsilon)
 
     # _epsilon is the initial default value for the epsilon parameter allowing pymodaq to know if the controller reached

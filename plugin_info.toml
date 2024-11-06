@@ -1,11 +1,11 @@
 ## To modify by developer(s) of the plugin
 
 [plugin-info]
-SHORT_PLUGIN_NAME = 'hinds'  #to be modified, for instance daqmx then rename the module name:
+SHORT_PLUGIN_NAME = 'hindsinstruments'  #to be modified, for instance daqmx then rename the module name:
 # (pymodaq_plugins_template become pymodaq_plugins_daqmx for instance)
 
-package-url = 'https://github.com/nano713/pymodaq_plugins_hinds' #to modify
-description = 'PyMoDaq plugins for instruments from Hinds Instruments'  #to modify
+package-url = 'https://github.com/PyMoDAQ/pymodaq_plugins_template' #to modify
+description = 'some word about your plugin'
 
 author = 'Author Name'
 author-email = 'Author email'

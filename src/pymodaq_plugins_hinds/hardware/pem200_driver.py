@@ -26,6 +26,14 @@ class PEM200Driver:
         else:
             raise ValueError("Drive value must be between 0.0 and 1.0")
 
+    def set_retardation(self, retardation):
+        if 0.0 <= retardation <= 1.0:
+            self.retardation=retardation
+        else:
+            raise ValueError("Retardation value must be between 0.0 and 1.0")
+
+
+
     def get_modulation_drive(self):
         response = self.instrument.query(':MOD:DRV?')
         # Extract the float value from the response

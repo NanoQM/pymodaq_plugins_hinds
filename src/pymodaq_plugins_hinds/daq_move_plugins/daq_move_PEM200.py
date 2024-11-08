@@ -35,7 +35,7 @@ class DAQ_Move_PEM200(DAQ_Move_base):
 
     """
     is_multiaxes = False  # TODO for your plugin set to True if this plugin is controlled for a multiaxis controller
-    _axis_names: Union[List[str], Dict[str, int]] = ['Axis1', 'Axis2']  # TODO for your plugin: complete the list
+    _axis_names: Union[List[str], Dict[str, int]] = ['PEM_200']  # TODO for your plugin: complete the list
     _controller_units: Union[str, List[str]] = 'nm'  # TODO for your plugin: put the correct unit here, it could be
     # TODO  a single str (the same one is applied to all axes) or a list of str (as much as the number of axes)
     _epsilon: Union[float, List[float]] = 0.1  # TODO replace this by a value that is correct depending on your controller
@@ -47,6 +47,10 @@ class DAQ_Move_PEM200(DAQ_Move_base):
     params = [
                  {'title': 'Resource Name:', 'name': 'resource_name', 'type': 'str', 'value': "ASRL6::INSTR"},
                  {'title': 'Retardation:', 'name': 'retardation', 'type': 'float', 'value': 0.5},
+                 {'title': 'Drive_value:', 'name': 'drive_value', 'type': 'float', 'value': 0.5},
+                 {'title': 'State:', 'name': 'state', 'type': 'int', 'value': 0}
+
+
                  # TODO for your custom plugin: elements to be added here as dicts in order to control your custom stage
                 ] + comon_parameters_fun(is_multiaxes, axis_names=_axis_names, epsilon=_epsilon)
     # _epsilon is the initial default value for the epsilon parameter allowing pymodaq to know if the controller reached
@@ -91,8 +95,8 @@ class DAQ_Move_PEM200(DAQ_Move_base):
     def close(self):
         """Terminate the communication protocol"""
         ## TODO for your custom plugin
-        raise NotImplemented  # when writing your own plugin remove this line
-        #  self.controller.your_method_to_terminate_the_communication()  # when writing your own plugin replace this line
+        # raise NotImplemented  # when writing your own plugin remove this line
+        self.controller.close()  # when writing your own plugin replace this line
 
     def commit_settings(self, param: Parameter):
         """Apply the consequences of a change of value in the detector settings
@@ -110,16 +114,19 @@ class DAQ_Move_PEM200(DAQ_Move_base):
             # if the motors connected to the controller are of different type (mm, µm, nm, , etc...)
             # see BrushlessDCMotor from the thorlabs plugin for an exemple
 
-            pass # DK delete pass and write some method
+            # pass # DK delete pass and write some method
+            self.controller.set_pem_output(self.settings(["state"]))
 
         # DK - add elif ... "retardation"
+        elif param.name() == "retardation":
+            self.controller.set_retardation(self.settings(["retardation"]))
 
-
-        # DK - add elif ... "state"
-        elif param.name() == "a_parameter_you've_added_in_self.params":
-           self.controller.your_method_to_apply_this_param_change()
 
         # DK - add elif ... "drive_value"
+        elif param.name() == "drive_value":
+           self.controller.set_modulation_drive(self.settings(["drive_value"]))
+
+
         else:
             pass
 
@@ -147,7 +154,7 @@ class DAQ_Move_PEM200(DAQ_Move_base):
             # todo: enter here whatever is needed for your controller initialization and eventual
             #  opening of the communication channel
 
-        info = "Whatever info you want to log" # DK - edit this line
+        info = "initialization of controller has been done" # DK - edit this line
 
         initialized = True
         return info, initialized
@@ -167,7 +174,7 @@ class DAQ_Move_PEM200(DAQ_Move_base):
         ## TODO for your custom plugin
         raise NotImplemented  # when writing your own plugin remove this line
         self.controller.your_method_to_set_an_absolute_value(value.value())  # when writing your own plugin replace this line
-        self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
+        # self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
 
     def move_rel(self, value: DataActuator):
         """ Move the actuator to the relative target actuator value defined by value
@@ -199,10 +206,9 @@ class DAQ_Move_PEM200(DAQ_Move_base):
       """Stop the actuator and emits move_done signal"""
 
       ## TODO for your custom plugin
-      raise NotImplemented  # when writing your own plugin remove this line
-      self.controller.your_method_to_stop_positioning()  # when writing your own plugin replace this line
-      self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
-
+      # raise NotImplemented  # when writing your own plugin remove this line
+      self.controller.set_pem_output(0) # when writing your own plugin replace this line
+      # self.emit_status(ThreadCommand('Updat_Status', ['Some info you want to log']))
 
 if __name__ == '__main__':
     main(__file__)

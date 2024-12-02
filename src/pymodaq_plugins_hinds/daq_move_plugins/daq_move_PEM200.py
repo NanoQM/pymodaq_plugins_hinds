@@ -5,6 +5,9 @@ from pymodaq.control_modules.move_utility_classes import DAQ_Move_base, comon_pa
 from pymodaq.utils.daq_utils import ThreadCommand # object used to send info back to the main thread
 from pymodaq.utils.parameter import Parameter
 from pymodaq_plugins_hinds.hardware.pem200_driver import PEM200Driver
+# from pymodaq.utils.logger import set_logger, get_module_name
+#
+# logger = set_logger(get_module_name(__file__))
 
 # TODO:
 # (1) change the name of the following class to DAQ_Move_TheNameOfYourChoice
@@ -45,7 +48,7 @@ class DAQ_Move_PEM200(DAQ_Move_base):
 
 # DK - you need retardation, drive_value, state
     params = [
-                 {'title': 'Resource Name:', 'name': 'resource_name', 'type': 'str', 'value': "ASRL6::INSTR"},
+                 {'title': 'Resource Name:', 'name': 'resource_name', 'type': 'str', 'value': "ASRL3::INSTR"},
                  {'title': 'Retardation:', 'name': 'retardation', 'type': 'float', 'value': 0.5},
                  {'title': 'Drive_value:', 'name': 'drive_value', 'type': 'float', 'value': 0.5},
                  {'title': 'State:', 'name': 'state', 'type': 'int', 'value': 0}
@@ -65,7 +68,7 @@ class DAQ_Move_PEM200(DAQ_Move_base):
         # pass
 
     def get_actuator_value(self):
-        """Get the current value from the hardware with scaling conversion.
+        """Get the current value fget wavelnengthrom the hardware with scaling conversion.
 
         Returns
         -------
@@ -73,7 +76,7 @@ class DAQ_Move_PEM200(DAQ_Move_base):
         """
         ## TODO for your custom plugin
         # raise NotImplemented  # when writing your own plugin remove this line
-        pos = DataActuator(data=self.controller.get_modulation_amplitude())  # when writing your own plugin replace this line
+        pos = DataActuator(data=self.controller.get_wavelength())  # when writing your own plugin replace this line
         pos = self.get_position_with_scaling(pos)
         return pos
 
@@ -115,17 +118,17 @@ class DAQ_Move_PEM200(DAQ_Move_base):
             # see BrushlessDCMotor from the thorlabs plugin for an exemple
 
             # pass # DK delete pass and write some method
-            self.controller.set_pem_output(self.settings(["state"]))
+            self.controller.set_pem_output(self.settings['state'])
+            # logger.debug(f"State changed to {self.settings.child('state').value()}")
 
         # DK - add elif ... "retardation"
         elif param.name() == "retardation":
-            self.controller.set_retardation(self.settings(["retardation"]))
+            self.controller.set_retardation(self.settings['retardation'])
 
 
         # DK - add elif ... "drive_value"
         elif param.name() == "drive_value":
-           self.controller.set_modulation_drive(self.settings(["drive_value"]))
-
+           self.controller.set_modulation_drive(self.settings["drive_value"])
 
         else:
             pass
@@ -172,10 +175,12 @@ class DAQ_Move_PEM200(DAQ_Move_base):
         self.target_value = value
         value = self.set_position_with_scaling(value)  # apply scaling if the user specified one
         ## TODO for your custom plugin
-        raise NotImplemented  # when writing your own plugin remove this line
-        self.controller.your_method_to_set_an_absolute_value(value.value())  # when writing your own plugin replace this line
+        # raise NotImplemented  # when writing your own plugin remove this line
+        self.controller.set_modulation_amplitude(value.value())
+        # when writing your own plugin replace this line
         # self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
 
+    # DK - Use set_modulation_amplitude but relative
     def move_rel(self, value: DataActuator):
         """ Move the actuator to the relative target actuator value defined by value
 

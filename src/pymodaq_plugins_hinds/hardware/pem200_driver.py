@@ -44,7 +44,7 @@ class PEM200Driver:
 
     # def set_modulation_amplitude(self, amplitude):
     #     self.instrument.write(f':MOD:AMP {amplitude}')
-    def get_wavelength(self)
+    def get_wavelength(self):
         return self.wavelength
 
     def set_modulation_amplitude(self, wavelength):

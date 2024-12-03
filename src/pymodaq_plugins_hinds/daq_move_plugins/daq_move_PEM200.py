@@ -48,7 +48,7 @@ class DAQ_Move_PEM200(DAQ_Move_base):
 
 # DK - you need retardation, drive_value, state
     params = [
-                 {'title': 'Resource Name:', 'name': 'resource_name', 'type': 'str', 'value': "ASRL3::INSTR"},
+                 {'title': 'Resource Name:', 'name': 'resource_name', 'type': 'str', 'value': "ASRL6::INSTR"},
                  {'title': 'Retardation:', 'name': 'retardation', 'type': 'float', 'value': 0.5},
                  {'title': 'Drive_value:', 'name': 'drive_value', 'type': 'float', 'value': 0.5},
                  {'title': 'State:', 'name': 'state', 'type': 'int', 'value': 0}
@@ -153,6 +153,7 @@ class DAQ_Move_PEM200(DAQ_Move_base):
         if self.is_master:  # is needed when controller is master
             self.controller = PEM200Driver(self.settings["resource_name"]) #  arguments for instantiation!)
             self.controller.connect()
+            self.controller.set_pem_output(1)
 
             # todo: enter here whatever is needed for your controller initialization and eventual
             #  opening of the communication channel
@@ -212,8 +213,10 @@ class DAQ_Move_PEM200(DAQ_Move_base):
 
       ## TODO for your custom plugin
       # raise NotImplemented  # when writing your own plugin remove this line
-      self.controller.set_pem_output(0) # when writing your own plugin replace this line
+      # self.controller.set_pem_output(0) # when writing your own plugin replace this line
       # self.emit_status(ThreadCommand('Updat_Status', ['Some info you want to log']))
+
+      return ''
 
 if __name__ == '__main__':
     main(__file__)

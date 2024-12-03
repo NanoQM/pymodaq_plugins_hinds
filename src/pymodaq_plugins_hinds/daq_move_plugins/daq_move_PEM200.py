@@ -99,6 +99,7 @@ class DAQ_Move_PEM200(DAQ_Move_base):
         """Terminate the communication protocol"""
         ## TODO for your custom plugin
         # raise NotImplemented  # when writing your own plugin remove this line
+        self.controller.set_pem_output(0)
         self.controller.close()  # when writing your own plugin replace this line
 
     def commit_settings(self, param: Parameter):

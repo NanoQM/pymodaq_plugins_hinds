@@ -1,4 +1,6 @@
 import pyvisa
+from pyqtgraph.examples.PColorMeshItem import wave_length
+
 
 class PEM200Driver:
     def __init__(self, resource_name):
@@ -7,6 +9,7 @@ class PEM200Driver:
         self.instrument = None
         self.resource_name = resource_name
         self.retardation = 0.5
+        self.wavelength =-1  # Set wavelength to 350 nm by default
 
     def connect(self):
         """Connect to the PEM200 device"""
@@ -26,6 +29,14 @@ class PEM200Driver:
         else:
             raise ValueError("Drive value must be between 0.0 and 1.0")
 
+    def set_retardation(self, retardation):
+        if 0.0 <= retardation <= 1.0:
+            self.retardation=retardation
+        else:
+            raise ValueError("Retardation value must be between 0.0 and 1.0")
+
+
+
     def get_modulation_drive(self):
         response = self.instrument.query(':MOD:DRV?')
         # Extract the float value from the response
@@ -33,10 +44,13 @@ class PEM200Driver:
 
     # def set_modulation_amplitude(self, amplitude):
     #     self.instrument.write(f':MOD:AMP {amplitude}')
+    def get_wavelength(self):
+        return self.wavelength
 
     def set_modulation_amplitude(self, wavelength):
         amplitude =  wavelength * self.retardation
         self.instrument.write(f':MOD:AMP {amplitude}')
+        self.wavelength = wavelength
 
     # def get_modulation_amplitude(self):
     #     """Get the modulation amplitude for a given wavelength"""

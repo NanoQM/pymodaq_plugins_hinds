@@ -6,6 +6,7 @@ class PEM200Driver:
         self.rm = None
         self.instrument = None
         self.resource_name = resource_name
+        self.retardation = 0.5
 
     def connect(self):
         """Connect to the PEM200 device"""
@@ -33,8 +34,8 @@ class PEM200Driver:
     # def set_modulation_amplitude(self, amplitude):
     #     self.instrument.write(f':MOD:AMP {amplitude}')
 
-    def set_modulation_amplitude(self, wavelength, retardation):
-        amplitude =  wavelength * retardation
+    def set_modulation_amplitude(self, wavelength):
+        amplitude =  wavelength * self.retardation
         self.instrument.write(f':MOD:AMP {amplitude}')
 
     # def get_modulation_amplitude(self):

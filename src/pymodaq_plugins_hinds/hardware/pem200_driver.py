@@ -25,13 +25,13 @@ class PEM200Driver:
         if 0.0 <= drive_value <= 1.0:
             self.instrument.write(f':MOD:DRV {drive_value}')
         else:
-            raise ValueError("Drive value must be between 0.0 and 1.0")
+            raise Exception("Drive value must be between 0.0 and 1.0")
 
     def set_retardation(self, retardation):
         if 0.0 <= retardation <= 1.0:
             self.retardation=retardation
         else:
-            raise ValueError("Retardation value must be between 0.0 and 1.0")
+            raise Exception("Retardation value must be between 0.0 and 1.0")
 
 
 
@@ -80,7 +80,7 @@ class PEM200Driver:
         if state in [0, 1]:
             self.instrument.write(f':SYS:PEMO {state}')
         else:
-            raise ValueError("State must be 0 (off) or 1 (on)")
+            raise Exception("State must be 0 (off) or 1 (on)")
 
     def close(self):
         if self.instrument:

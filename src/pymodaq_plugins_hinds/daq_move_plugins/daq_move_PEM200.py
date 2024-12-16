@@ -50,7 +50,7 @@ class DAQ_Move_PEM200(DAQ_Move_base):
     params = [
                  {'title': 'Resource Name:', 'name': 'resource_name', 'type': 'str', 'value': "ASRL6::INSTR"},
                  {'title': 'Retardation:', 'name': 'retardation', 'type': 'float', 'value': 0, 'min': 0, 'max': 1},
-                 {'title': 'Drive_value:', 'name': 'drive_value', 'type': 'float', 'value': 0, 'min': 0, 'max': 1},
+                 {'title': 'Drive Value:', 'name': 'drive_value', 'type': 'float', 'value': 0.1, 'min': 0, 'max': 1},
                  {'title': 'State:', 'name': 'state', 'type': 'list', 'value': 0, 'limits': [0, 1]},
                  {'title': 'Info', 'name': 'info', 'type': 'str', 'value': '', 'readonly': True},
                  {'title': 'Frequency (Hz)', 'name': 'frequency', 'type': 'float', 'value': 0, 'readonly': True},

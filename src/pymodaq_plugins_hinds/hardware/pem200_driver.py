@@ -25,24 +25,34 @@ class PEM200Driver:
         return self.retardation
 
     def set_retardation(self, retardation):
-        if 0.0 <= retardation <= 1.0:
-            self.retardation=retardation
-        else:
-            raise Exception("Retardation value must be between 0.0 and 1.0")
+        self.retardation = retardation
+        # if 0.0 <= retardation <= 1.0:
+        #     self.retardation=retardation
+        # else:
+        #     raise Exception("Retardation value must be between 0.0 and 1.0")
 
     def get_modulation_drive(self):
+        """
+        Get modulator drive voltage as range 0 to 1
+        Returns:
+            float: The modulation drive value
+        """
         response = self.instrument.query(':MOD:DRV?')
         # Extract the float value from the response
         return float(response.split('](')[1].strip().rstrip(')'))
 
     def set_modulation_drive(self, drive_value):
+        """
+        Set modulator drive voltage as range 0 to 1
+        Args:
+            drive_value:
+
+        """
         if 0.0 <= drive_value <= 1.0:
             self.instrument.write(f':MOD:DRV {drive_value}')
         else:
             raise Exception("Drive value must be between 0.0 and 1.0")
 
-    # def set_modulation_amplitude(self, amplitude):
-    #     self.instrument.write(f':MOD:AMP {amplitude}')
     def get_wavelength(self):
         return self.wavelength
 
@@ -61,17 +71,6 @@ class PEM200Driver:
 
     def set_modulation_amplitude(self, wavelength):
         """
-        => *IDN?
-        <= [IDN](Hinds PEM controller 200 V01)
-        => :SYS:PEMO 1
-        <= Setting output to: 1
-        => :MOD:AMP 318.5
-        <= [AMP](3.18500000E+2)
-        => :MOD:AMP 159.3
-        Serial timeout
-        => :MOD:FREQ?
-        <= [FREQUENCY](5.00775648E+4)
-
         Args:
             wavelength:
 

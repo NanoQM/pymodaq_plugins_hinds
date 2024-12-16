@@ -49,11 +49,11 @@ class DAQ_Move_PEM200(DAQ_Move_base):
 # DK - you need retardation, drive_value, state
     params = [
                  {'title': 'Resource Name:', 'name': 'resource_name', 'type': 'str', 'value': "ASRL6::INSTR"},
-                 {'title': 'Retardation:', 'name': 'retardation', 'type': 'float', 'value': 0.5},
-                 {'title': 'Drive_value:', 'name': 'drive_value', 'type': 'float', 'value': 0.5},
-                 {'title': 'State:', 'name': 'state', 'type': 'list', 'value': -1, 'limits': [0, 1]}
-
-
+                 {'title': 'Retardation:', 'name': 'retardation', 'type': 'float', 'value': 0, 'min': 0, 'max': 1},
+                 {'title': 'Drive_value:', 'name': 'drive_value', 'type': 'float', 'value': 0, 'min': 0, 'max': 1},
+                 {'title': 'State:', 'name': 'state', 'type': 'list', 'value': 0, 'limits': [0, 1]},
+                 {'title': 'Info', 'name': 'info', 'type': 'str', 'value': '', 'readonly': True},
+                 {'title': 'Frequency (Hz)', 'name': 'frequency', 'type': 'float', 'value': 0, 'readonly': True},
                  # TODO for your custom plugin: elements to be added here as dicts in order to control your custom stage
                 ] + comon_parameters_fun(is_multiaxes, axis_names=_axis_names, epsilon=_epsilon)
     # _epsilon is the initial default value for the epsilon parameter allowing pymodaq to know if the controller reached
@@ -111,10 +111,8 @@ class DAQ_Move_PEM200(DAQ_Move_base):
         param: Parameter
             A given parameter (within detector_settings) whose value has been changed by the user
         """
-        ## TODO for your custom plugin
         if param.name() == 'state':
             self.controller.set_pem_output(self.settings['state'])
-            self.settings.child('state').setValue(self.settings['state'])
 
         elif param.name() == "retardation":
             self.controller.set_retardation(self.settings['retardation'])
@@ -132,6 +130,7 @@ class DAQ_Move_PEM200(DAQ_Move_base):
         ----------
         controller: (object)
             custom object of a PyMoDAQ plugin (Slave case). None if only one actuator by controller (Master case)
+
 
         Returns
         -------
@@ -151,44 +150,45 @@ class DAQ_Move_PEM200(DAQ_Move_base):
             # todo: enter here whatever is needed for your controller initialization and eventual
             #  opening of the communication channel
 
-        info = "initialization of controller has been done" # DK - edit this line
+        self.controller.set_retardation(self.settings['retardation'])
+
+        info = self.controller.identify()
+        self.settings.child('info').setValue(info)
+
+        self.settings.child('frequency').setValue(self.controller.get_frequency())
+        self.settings.child("retardation").setValue(self.controller.get_retardation())
+        self.settings.child("drive_value").setValue(self.controller.get_modulation_drive())
 
         initialized = True
         return info, initialized
 
-    # DK - Use set_modulation_amplitude
     def move_abs(self, value: DataActuator):
         """ Move the actuator to the absolute target defined by value
 
         Parameters
         ----------
-        value: (float) value of the absolute target positioning
+        value: (DataActuator) object of the absolute target positioning
         """
 
         value = self.check_bound(value)  #if user checked bounds, the defined bounds are applied here
         self.target_value = value
         value = self.set_position_with_scaling(value)  # apply scaling if the user specified one
-        ## TODO for your custom plugin
-        # raise NotImplemented  # when writing your own plugin remove this line
         self.controller.set_modulation_amplitude(value.value())
         # when writing your own plugin replace this line
         # self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
 
-    # DK - Use set_modulation_amplitude but relative
     def move_rel(self, value: DataActuator):
         """ Move the actuator to the relative target actuator value defined by value
 
         Parameters
         ----------
-        value: (float) value of the relative target positioning
+        value: (DataActuator) object of the relative target positioning
         """
         value = self.check_bound(self.current_position + value) - self.current_position
         self.target_value = value + self.current_position
         value = self.set_position_with_scaling(self.target_value)
         # value = self.set_position_relative_with_scaling(value)
 
-        ## TODO for your custom plugin
-        # raise NotImplemented  # when writing your own plugin remove this line
         self.controller.set_modulation_amplitude(value.value())  # when writing your own plugin replace this line
         # self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
 

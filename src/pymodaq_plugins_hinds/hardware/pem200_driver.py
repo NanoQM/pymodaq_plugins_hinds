@@ -21,11 +21,8 @@ class PEM200Driver:
         # Extract the desired part from the response and remove the trailing ')'
         return response.split('](')[1].strip().rstrip(')')
 
-    def set_modulation_drive(self, drive_value):
-        if 0.0 <= drive_value <= 1.0:
-            self.instrument.write(f':MOD:DRV {drive_value}')
-        else:
-            raise Exception("Drive value must be between 0.0 and 1.0")
+    def get_retardation(self):
+        return self.retardation
 
     def set_retardation(self, retardation):
         if 0.0 <= retardation <= 1.0:
@@ -33,28 +30,21 @@ class PEM200Driver:
         else:
             raise Exception("Retardation value must be between 0.0 and 1.0")
 
-
-
     def get_modulation_drive(self):
         response = self.instrument.query(':MOD:DRV?')
         # Extract the float value from the response
         return float(response.split('](')[1].strip().rstrip(')'))
 
+    def set_modulation_drive(self, drive_value):
+        if 0.0 <= drive_value <= 1.0:
+            self.instrument.write(f':MOD:DRV {drive_value}')
+        else:
+            raise Exception("Drive value must be between 0.0 and 1.0")
+
     # def set_modulation_amplitude(self, amplitude):
     #     self.instrument.write(f':MOD:AMP {amplitude}')
     def get_wavelength(self):
         return self.wavelength
-
-    def set_modulation_amplitude(self, wavelength):
-        amplitude =  wavelength * self.retardation
-        self.instrument.write(f':MOD:AMP {amplitude}')
-        self.wavelength = wavelength
-
-    # def get_modulation_amplitude(self):
-    #     """Get the modulation amplitude for a given wavelength"""
-    #     response = self.instrument.query(':MOD:AMP?')
-    #     # Extract the float value from the response
-    #     return float(response.split('](')[1].strip().rstrip(')'))
 
     def get_modulation_amplitude(self):
         """Get the modulation amplitude for a given wavelength
@@ -67,6 +57,31 @@ class PEM200Driver:
 
         # Extract the float value from the response
         return amplitude
+
+
+    def set_modulation_amplitude(self, wavelength):
+        """
+        => *IDN?
+        <= [IDN](Hinds PEM controller 200 V01)
+        => :SYS:PEMO 1
+        <= Setting output to: 1
+        => :MOD:AMP 318.5
+        <= [AMP](3.18500000E+2)
+        => :MOD:AMP 159.3
+        Serial timeout
+        => :MOD:FREQ?
+        <= [FREQUENCY](5.00775648E+4)
+
+        Args:
+            wavelength:
+
+        Returns:
+
+        """
+
+        amplitude =  wavelength * self.retardation
+        self.instrument.write(f':MOD:AMP {amplitude}')
+        self.wavelength = wavelength
 
 
     def get_frequency(self):

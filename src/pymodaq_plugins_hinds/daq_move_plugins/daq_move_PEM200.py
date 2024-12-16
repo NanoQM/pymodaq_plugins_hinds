@@ -113,23 +113,12 @@ class DAQ_Move_PEM200(DAQ_Move_base):
         """
         ## TODO for your custom plugin
         if param.name() == 'state':
-            # self.controller... # DK - edit this line
-
-            # do this only if you can and if the units are not known beforehand, for instance
-            # if the motors connected to the controller are of different type (mm, µm, nm, , etc...)
-            # see BrushlessDCMotor from the thorlabs plugin for an exemple
-
-            # pass # DK delete pass and write some method
             self.controller.set_pem_output(self.settings['state'])
-            self.settings['state'].set_value(self.settings['state'])
-            # logger.debug(f"State changed to {self.settings.child('state').value()}")
+            self.settings.child('state').setValue(self.settings['state'])
 
-        # DK - add elif ... "retardation"
         elif param.name() == "retardation":
             self.controller.set_retardation(self.settings['retardation'])
 
-
-        # DK - add elif ... "drive_value"
         elif param.name() == "drive_value":
            self.controller.set_modulation_drive(self.settings["drive_value"])
 

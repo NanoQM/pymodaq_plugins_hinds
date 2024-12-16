@@ -51,7 +51,7 @@ class DAQ_Move_PEM200(DAQ_Move_base):
                  {'title': 'Resource Name:', 'name': 'resource_name', 'type': 'str', 'value': "ASRL6::INSTR"},
                  {'title': 'Retardation:', 'name': 'retardation', 'type': 'float', 'value': 0.5},
                  {'title': 'Drive_value:', 'name': 'drive_value', 'type': 'float', 'value': 0.5},
-                 {'title': 'State:', 'name': 'state', 'type': 'int', 'value': 0}
+                 {'title': 'State:', 'name': 'state', 'type': 'list', 'value': -1, 'limits': [0, 1]}
 
 
                  # TODO for your custom plugin: elements to be added here as dicts in order to control your custom stage
@@ -100,6 +100,7 @@ class DAQ_Move_PEM200(DAQ_Move_base):
         ## TODO for your custom plugin
         # raise NotImplemented  # when writing your own plugin remove this line
         self.controller.set_pem_output(0)
+        self.settings['state'] = 0
         self.controller.close()  # when writing your own plugin replace this line
 
     def commit_settings(self, param: Parameter):
@@ -120,6 +121,7 @@ class DAQ_Move_PEM200(DAQ_Move_base):
 
             # pass # DK delete pass and write some method
             self.controller.set_pem_output(self.settings['state'])
+            self.settings['state'].set_value(self.settings['state'])
             # logger.debug(f"State changed to {self.settings.child('state').value()}")
 
         # DK - add elif ... "retardation"
@@ -154,7 +156,8 @@ class DAQ_Move_PEM200(DAQ_Move_base):
         if self.is_master:  # is needed when controller is master
             self.controller = PEM200Driver(self.settings["resource_name"]) #  arguments for instantiation!)
             self.controller.connect()
-            self.controller.set_pem_output(1)
+            # self.controller.set_pem_output(1)
+            # self.settings['state'] = 1
 
             # todo: enter here whatever is needed for your controller initialization and eventual
             #  opening of the communication channel

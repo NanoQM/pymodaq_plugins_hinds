@@ -24,8 +24,8 @@ Hinds instruments controller for Photoelastic Modulator-200.
 Authors
 =======
 
-* Astha Khandelwal  (asthak@iisc.ac.in)
-* Daichi Kozawa  (KOZAWA.Daichi@nims.go.jp)
+* Astha Khandelwal
+* Daichi Kozawa
 
 .. if needed use this field
 

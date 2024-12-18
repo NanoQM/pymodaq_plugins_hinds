@@ -7,8 +7,8 @@ SHORT_PLUGIN_NAME = 'hinds'  #to be modified, for instance daqmx then rename the
 package-url = 'https://github.com/nano713/pymodaq_plugins_hinds' #to modify
 description = 'PyMoDaq plugins for instruments from Hinds Instruments'  #to modify
 
-author = 'Author Name'
-author-email = 'Author email'
+author = 'Daichi Kozawa'
+author-email = 'kozawa.daichi@nims.go.jp'
 license = 'MIT'
 
 [plugin-install]

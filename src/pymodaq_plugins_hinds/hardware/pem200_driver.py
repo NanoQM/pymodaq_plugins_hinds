@@ -1,5 +1,4 @@
 import pyvisa
-from pyqtgraph.examples.PColorMeshItem import wave_length
 
 
 class PEM200Driver:

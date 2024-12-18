@@ -1,5 +1,5 @@
-pymodaq_plugins_template
-########################
+pymodaq_plugins_hinds
+#####################
 
 .. the following must be adapted to your developed package, links to pypi, github  description...
 
@@ -19,14 +19,13 @@ pymodaq_plugins_template
     :target: https://github.com/PyMoDAQ/pymodaq_plugins_template/actions/workflows/Test.yml
 
 
-Use this template to create a repository on your account and start the development of your own PyMoDAQ plugin!
-
+Hinds instruments controller for Photoelastic Modulator-200.
 
 Authors
 =======
 
-* First Author  (myemail@xxx.org)
-* Other author (myotheremail@xxx.org)
+* Astha Khandelwal  (asthak@iisc.ac.in)
+* Daichi Kozawa  (KOZAWA.Daichi@nims.go.jp)
 
 .. if needed use this field
 
@@ -36,7 +35,7 @@ Authors
     * First Contributor
     * Other Contributors
 
-.. if needed use this field
+ .. if needed use this field
 
   Depending on the plugin type, delete/complete the fields below
 
@@ -47,42 +46,35 @@ Instruments
 Below is the list of instruments included in this plugin
 
 Actuators
-+++++++++
+=========
 
-* **yyy**: control of yyy actuators
-* **xxx**: control of xxx actuators
+* **PEM 200**: controller for the Photoelastic modulator
 
-Viewer0D
-++++++++
+.. Viewer0D
+.. ++++++++
 
-* **yyy**: control of yyy 0D detector
-* **xxx**: control of xxx 0D detector
-
-Viewer1D
-++++++++
-
-* **yyy**: control of yyy 1D detector
-* **xxx**: control of xxx 1D detector
+.. * **yyy**: control of yyy 0D detector
+.. * **xxx**: control of xxx 0D detector
 
 
-Viewer2D
-++++++++
 
-* **yyy**: control of yyy 2D detector
-* **xxx**: control of xxx 2D detector
+..  Viewer1D
+.. ++++++++
 
-
-PID Models
-==========
+.. * **yyy**: control of yyy 1D detector
+.. * **xxx**: control of xxx 1D detector
 
 
-Extensions
-==========
+..  Viewer2D
+.. ++++++++
 
+.. * **yyy**: control of yyy 2D detector
+..  * **xxx**: control of xxx 2D detector
 
 Installation instructions
 =========================
 
-* PyMoDAQ’s version.
-* Operating system’s version.
-* What manufacturer’s drivers should be installed to make this plugin run?
+* PyMoDAQ’s version: 4.4.7
+* PEM200 User Interface
+
+    install through hinds's instrument website https://www.hindsinstruments.com/products/components/photoelastic-modulators/pem-200-controller/

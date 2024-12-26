@@ -49,7 +49,7 @@ class DAQ_Move_PEM200(DAQ_Move_base):
 # DK - you need retardation, drive_value, state
     params = [
                  {'title': 'Resource Name:', 'name': 'resource_name', 'type': 'str', 'value': "ASRL6::INSTR"},
-                 {'title': 'Retardation:', 'name': 'retardation', 'type': 'float', 'value': 0, 'min': 0, 'max': 1},
+                 {'title': 'Retardation:', 'name': 'retardation', 'type': 'float', 'value': 0.5, 'min': 0, 'max': 1},
                  {'title': 'Drive Value:', 'name': 'drive_value', 'type': 'float', 'value': 0.1, 'min': 0, 'max': 1},
                  {'title': 'State:', 'name': 'state', 'type': 'list', 'value': 0, 'limits': [0, 1]},
                  {'title': 'Info', 'name': 'info', 'type': 'str', 'value': '', 'readonly': True},
@@ -144,8 +144,6 @@ class DAQ_Move_PEM200(DAQ_Move_base):
         if self.is_master:  # is needed when controller is master
             self.controller = PEM200Driver(self.settings["resource_name"]) #  arguments for instantiation!)
             self.controller.connect()
-            # self.controller.set_pem_output(1)
-            # self.settings['state'] = 1
 
             # todo: enter here whatever is needed for your controller initialization and eventual
             #  opening of the communication channel
@@ -158,6 +156,9 @@ class DAQ_Move_PEM200(DAQ_Move_base):
         self.settings.child('frequency').setValue(self.controller.get_frequency())
         self.settings.child("retardation").setValue(self.controller.get_retardation())
         self.settings.child("drive_value").setValue(self.controller.get_modulation_drive())
+
+        self.controller.set_pem_output(1) # turn on
+        self.settings.child("state").setValue(1)
 
         initialized = True
         return info, initialized
